@@ -12,9 +12,11 @@
   "app": {
     "windows": [
       {
-        "title": "asp-launcher",
-        "width": 800,
-        "height": 600
+        "title": "ASP Launcher",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 960,
+        "minHeight": 640
       }
     ],
     "security": {
