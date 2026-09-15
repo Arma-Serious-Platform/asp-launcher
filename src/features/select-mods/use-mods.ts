@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { launcherApi, type RemoteMod, type Settings } from "@/shared/api/tauri";
+import { hasFtpSource, launcherApi, type RemoteMod, type Settings } from "@/shared/api/tauri";
 
 export function useMods(settings: Settings, onChange: (next: Settings) => void) {
   const [mods, setMods] = useState<RemoteMod[]>([]);
@@ -7,7 +7,7 @@ export function useMods(settings: Settings, onChange: (next: Settings) => void) 
   const [error, setError] = useState<string | null>(null);
 
   const refresh = useCallback(async (current = settings) => {
-    if (!current.ftp.host) {
+    if (!hasFtpSource(current.ftp)) {
       setMods([]);
       return [];
     }

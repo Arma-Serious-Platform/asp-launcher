@@ -69,7 +69,7 @@ pub fn launch_game(state: State<'_, AppState>) -> Result<(), String> {
 }
 
 #[tauri::command]
-pub async fn ftp_test_connection(state: State<'_, AppState>) -> Result<(), String> {
+pub async fn ftp_test_connection(state: State<'_, AppState>) -> Result<ftp::FtpProbe, String> {
     let settings = state.snapshot()?;
     ftp::test_connection(&settings.ftp).await
 }
@@ -128,4 +128,18 @@ pub async fn fetch_weekends() -> Result<Value, String> {
         .json::<Value>()
         .await
         .map_err(|e| format!("Не вдалося розібрати анонси: {e}"))
+}
+
+#[tauri::command]
+pub async fn fetch_servers() -> Result<Value, String> {
+    let response = reqwest::get("https://service.beta.vtg.in.ua/api/servers?fetchActualInfo=true")
+        .await
+        .map_err(|e| format!("Не вдалося отримати статус серверів: {e}"))?;
+    if !response.status().is_success() {
+        return Err(format!("API серверів повернуло {}", response.status()));
+    }
+    response
+        .json::<Value>()
+        .await
+        .map_err(|e| format!("Не вдалося розібрати статус серверів: {e}"))
 }

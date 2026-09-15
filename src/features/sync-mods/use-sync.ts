@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import {
+  hasFtpSource,
   launcherApi,
   type DownloadProgress,
   type Settings,
@@ -21,8 +22,12 @@ export function useSync(settings: Settings, ready: boolean) {
   const [error, setError] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
-    if (!settings.ftp.host || settings.selectedMods.length === 0) {
+    if (!hasFtpSource(settings.ftp) || settings.selectedMods.length === 0) {
       setStatus({ ready: true, bytesMissing: 0, filesMissing: 0 });
+      return;
+    }
+    if (!settings.modsPath.trim()) {
+      setStatus({ ready: false, bytesMissing: 0, filesMissing: 0 });
       return;
     }
     try {
@@ -32,7 +37,7 @@ export function useSync(settings: Settings, ready: boolean) {
       setStatus(null);
       setError(err instanceof Error ? err.message : String(err));
     }
-  }, [settings.ftp.host, settings.selectedMods]);
+  }, [settings.ftp.host, settings.ftp.sourceUrl, settings.selectedMods, settings.modsPath]);
 
   useEffect(() => {
     if (!ready) {
@@ -57,6 +62,10 @@ export function useSync(settings: Settings, ready: boolean) {
   }, []);
 
   const start = useCallback(async () => {
+    if (!settings.modsPath.trim()) {
+      setError("Вкажіть теку аддонів");
+      return;
+    }
     setBusy(true);
     setError(null);
     setProgress({ ...idleProgress, phase: "listing", message: "Сканування FTP..." });
@@ -70,7 +79,7 @@ export function useSync(settings: Settings, ready: boolean) {
     } finally {
       setBusy(false);
     }
-  }, [refresh]);
+  }, [refresh, settings.modsPath]);
 
   const cancel = useCallback(async () => {
     await launcherApi.cancelSync();

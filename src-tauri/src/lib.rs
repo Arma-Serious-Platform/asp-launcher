@@ -1,3 +1,4 @@
+mod a3s;
 mod arma;
 mod commands;
 mod ftp;
@@ -29,6 +30,7 @@ pub fn run() {
             commands::start_sync,
             commands::cancel_sync,
             commands::fetch_weekends,
+            commands::fetch_servers,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

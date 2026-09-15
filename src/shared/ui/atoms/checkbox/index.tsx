@@ -1,4 +1,5 @@
 import { CheckIcon } from "lucide-react";
+import type { ReactNode } from "react";
 import { cn } from "@/shared/lib/cn";
 
 export const Checkbox = ({
@@ -10,12 +11,12 @@ export const Checkbox = ({
   checked: boolean;
   onClick?: () => void;
   className?: string;
-  label?: string;
+  label?: ReactNode;
 }) => (
   <button
     type="button"
     onClick={onClick}
-    className={cn("flex items-center gap-2 text-left text-sm text-zinc-100", className)}
+    className={cn("flex w-full items-center gap-2 text-left text-sm text-zinc-100", className)}
   >
     <span
       className={cn(

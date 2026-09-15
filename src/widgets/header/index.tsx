@@ -11,8 +11,9 @@ export const Header = ({ onOpenSettings }: { onOpenSettings: () => void }) => (
         <p className="mt-1 text-xs text-zinc-400">Virtual Tactical Games</p>
       </div>
     </div>
-    <Button variant="ghost" size="icon" onClick={onOpenSettings} aria-label="Налаштування">
+    <Button variant="ghost" onClick={onOpenSettings}>
       <SettingsIcon />
+      Налаштування
     </Button>
   </header>
 );

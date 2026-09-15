@@ -6,6 +6,7 @@ import { Progress } from "@/shared/ui/organisms/progress";
 
 export const PlayBar = ({
   canPlay,
+  canInstall,
   busy,
   status,
   progress,
@@ -16,6 +17,7 @@ export const PlayBar = ({
   onCancel,
 }: {
   canPlay: boolean;
+  canInstall: boolean;
   busy: boolean;
   status: SyncStatus | null;
   progress: DownloadProgress;
@@ -31,40 +33,41 @@ export const PlayBar = ({
   const label = canPlay ? "Грати" : "Встановити";
 
   return (
-    <footer className="border-t border-white/10 bg-black/50 px-5 py-4 backdrop-blur">
-      <div className="mb-3 flex items-center justify-between gap-4 text-sm text-zinc-400">
-        <p className="min-w-0 truncate">
-          {error ? (
-            <span className="text-destructive">{error}</span>
-          ) : busy ? (
-            progress.currentFile
-              ? `${progress.modName ?? ""} / ${progress.currentFile}`
-              : progress.message || "Завантаження..."
-          ) : status && !status.ready ? (
-            `Потрібно завантажити ${status.filesMissing} файлів (${formatBytes(status.bytesMissing)})`
-          ) : armaReady ? (
-            "Готово до гри"
-          ) : (
-            "Вкажіть шлях до Arma 3 у налаштуваннях"
-          )}
-        </p>
+    <div className="border-t border-white/10 bg-black/50 px-3 py-3 backdrop-blur">
+      <p className="mb-2 min-w-0 truncate text-sm text-zinc-400">
+        {error ? (
+          <span className="text-destructive">{error}</span>
+        ) : busy ? (
+          progress.currentFile
+            ? `${progress.modName ?? ""} / ${progress.currentFile}`
+            : progress.message || "Завантаження..."
+        ) : !canPlay && !canInstall ? (
+          "Вкажіть теку аддонів"
+        ) : status && !status.ready ? (
+          `Потрібно завантажити ${status.filesMissing} файлів (${formatBytes(status.bytesMissing)})`
+        ) : armaReady ? (
+          "Готово до гри"
+        ) : (
+          "Вкажіть шлях до Arma 3"
+        )}
+      </p>
+      <div className="flex items-center gap-3">
+        <Progress className="flex-1" value={pct} indeterminate={indeterminate} />
         {busy && progress.bytesTotal > 0 && (
-          <span>
+          <span className="shrink-0 text-xs text-zinc-500">
             {formatBytes(progress.bytesDone)} / {formatBytes(progress.bytesTotal)}
           </span>
         )}
-      </div>
-      <div className="flex items-center gap-4">
-        <Progress className="flex-1" value={pct} indeterminate={indeterminate} />
         {busy ? (
-          <Button variant="secondary" onClick={onCancel}>
+          <Button variant="secondary" size="lg" onClick={onCancel}>
             <SquareIcon />
             Скасувати
           </Button>
         ) : (
           <Button
-            size="lg"
-            disabled={canPlay && !armaReady}
+            size="xl"
+            className="min-w-0 shrink-0 px-6 w-full"
+            disabled={canPlay ? !armaReady : !canInstall}
             onClick={canPlay ? onPlay : onInstall}
           >
             {canPlay ? <PlayIcon /> : <DownloadIcon />}
@@ -72,6 +75,6 @@ export const PlayBar = ({
           </Button>
         )}
       </div>
-    </footer>
+    </div>
   );
 };

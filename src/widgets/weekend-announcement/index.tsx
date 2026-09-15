@@ -20,7 +20,7 @@ export const WeekendAnnouncement = ({
 
   if (loading) {
     return (
-      <Card className="flex min-h-72 items-center justify-center text-zinc-400">
+      <Card className="flex min-h-0 flex-1 items-center justify-center text-zinc-400">
         Завантаження анонсів...
       </Card>
     );
@@ -28,13 +28,13 @@ export const WeekendAnnouncement = ({
 
   if (error) {
     return (
-      <Card className="flex min-h-72 items-center justify-center text-destructive">{error}</Card>
+      <Card className="flex min-h-0 flex-1 items-center justify-center text-destructive">{error}</Card>
     );
   }
 
   if (!weekend || !active) {
     return (
-      <Card className="flex min-h-72 items-center justify-center text-zinc-400">
+      <Card className="flex min-h-0 flex-1 items-center justify-center text-zinc-400">
         Немає опублікованих ігор
       </Card>
     );
@@ -46,23 +46,24 @@ export const WeekendAnnouncement = ({
 
   return (
     <Card className="flex min-h-0 flex-1 flex-col overflow-hidden p-0">
-      <div className="border-b border-white/10 px-5 py-4">
-        <p className="text-xs uppercase tracking-wide text-text-primary">Анонси</p>
-        <h2 className="mt-1 text-xl font-semibold">{weekend.name}</h2>
+      <div className="shrink-0 border-b border-white/10 px-4 py-2">
+        <p className="text-[11px] uppercase tracking-wide text-text-primary">Анонси</p>
+        <h2 className="truncate text-sm font-semibold">{weekend.name}</h2>
       </div>
-      <div className="flex overflow-x-auto border-b border-white/10">
+      <div className="flex shrink-0 overflow-x-auto border-b border-white/10">
         {games.map((game, index) => (
           <Tab
             key={game.id}
+            className="min-w-[7rem] flex-none px-2 py-1 text-xs"
             isActive={index === activeIndex}
             onClick={() => setActiveIndex(index)}
             title={
               <span className="block">
-                <span className="block font-medium text-inherit">
+                <span className="block truncate font-medium text-inherit">
                   {game.mission?.name || `Гра ${index + 1}`}
                 </span>
                 {game.date && (
-                  <span className="mt-0.5 block text-xs capitalize text-zinc-500">
+                  <span className="block text-[10px] capitalize text-zinc-500">
                     {formatGameDate(game.date)}
                   </span>
                 )}
@@ -81,7 +82,7 @@ export const WeekendAnnouncement = ({
         ) : (
           <div className="flex h-full items-center justify-center text-zinc-500">Немає зображення</div>
         )}
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-3">
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-4">
           {active.mission?.island?.name && (
             <p className="mb-2 inline-flex items-center gap-1.5 text-sm text-zinc-200">
               <MapIcon className="size-4 text-text-primary" />

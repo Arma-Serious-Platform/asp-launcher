@@ -26,7 +26,11 @@ serde_json = "1"
 chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
 tokio = { version = "1", features = ["io-util", "fs", "sync", "rt"] }
 suppaftp = { version = "12", features = ["tokio"] }
-reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "stream"] }
+jaded = "0.5"
+flate2 = "1"
+sha1 = "0.10"
+url = "2"
 
 [target.'cfg(windows)'.dependencies]
 winreg = "0.55"

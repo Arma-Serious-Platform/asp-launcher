@@ -23,7 +23,6 @@ export function useSettings() {
             next = await launcherApi.saveSettings({
               ...next,
               arma3Path: detected,
-              modsPath: next.modsPath || detected,
             });
           }
         }
